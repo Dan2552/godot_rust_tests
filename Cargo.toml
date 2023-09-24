@@ -1,0 +1,10 @@
+[package]
+name = "godot_rust_specs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+lazy_static = "1.4"
+godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
