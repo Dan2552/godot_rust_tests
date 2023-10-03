@@ -95,6 +95,22 @@ macro_rules! println_blue {
     });
 }
 
+#[macro_export]
+macro_rules! assert_approx_eq {
+    ($a:expr, $b:expr, $epsilon:expr) => {
+        if ($a - $b).abs() > $epsilon {
+            panic!(
+                "assertion failed: ({} - {}).abs() <= {}. Values: {} and {}",
+                stringify!($a),
+                stringify!($b),
+                stringify!($epsilon),
+                $a,
+                $b
+            );
+        }
+    };
+}
+
 use godot::engine::NodeVirtual;
 
 #[derive(GodotClass)]
