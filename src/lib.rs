@@ -3,6 +3,8 @@ use std::collections::VecDeque;
 use std::io::{self, Write};
 use std::panic;
 use std::sync::Mutex;
+use backtrace::Backtrace;
+use regex::Regex;
 
 lazy_static::lazy_static! {
     pub static ref REGISTERED_TESTS: Mutex<VecDeque<fn(&Gd<Node>)>> = Mutex::new(VecDeque::new());
@@ -135,9 +137,35 @@ impl NodeVirtual for TestRunner {
     }
 
     fn ready(&mut self) {
-        println_blue!("--------------------------");
-        println_blue!("Starting integration specs");
-        println_blue!("--------------------------");
+        println!("");
+
+        panic::set_hook(Box::new(|info| {
+            println_red!("{}", info);
+            let backtrace = Backtrace::new();
+            let backtrace = format!("{:?}", backtrace);
+
+            let re = Regex::new(
+                r"(?s)\w+\d+: godot_rust_specs::impl\$0::run_test.*"
+            ).unwrap();
+            let backtrace = re.replace_all(&backtrace, "");
+
+            let re = Regex::new(
+                r"(?s)\w+\d+: godot_rust_specs::TestRunner::run_test::.*"
+            ).unwrap();
+            let backtrace = re.replace_all(&backtrace, "");
+
+            let re = Regex::new(
+                r"(?s).*/library\\core\\src\\panicking.rs:\d+"
+            ).unwrap();
+            let backtrace = re.replace_all(&backtrace, "");
+
+            let re = Regex::new(
+                r"(?s).*/library/core/src/panicking.rs:\d+:\d+"
+            ).unwrap();
+            let backtrace = re.replace_all(&backtrace, "");
+
+            println_blue!("{}", backtrace);
+        }));
     }
 
     fn process(&mut self, delta: f64) {
