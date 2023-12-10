@@ -113,8 +113,6 @@ macro_rules! assert_approx_eq {
     };
 }
 
-use godot::engine::NodeVirtual;
-
 #[derive(GodotClass)]
 #[class(base=Node)]
 struct TestRunner {
@@ -126,7 +124,7 @@ struct TestRunner {
 }
 
 #[godot_api]
-impl NodeVirtual for TestRunner {
+impl INode for TestRunner {
     fn init(base: Base<Node>) -> Self {
         Self {
             base,
