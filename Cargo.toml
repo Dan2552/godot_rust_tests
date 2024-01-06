@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 lazy_static = "1.4"
-godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
+godot = { git = "https://github.com/godot-rust/gdext", rev = "e3644a0348b4d6fe952007cebd94d1d3f5ddfd86" }
 backtrace = "0.3"
 regex = "1.10.2"

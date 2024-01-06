@@ -190,7 +190,8 @@ impl TestRunner {
             println_green!("\n\n{} examples, 0 failures", passes);
         }
 
-        self.base.get_tree().unwrap().quit();
+
+        self.base().get_tree().unwrap().quit();
     }
 
     // Remove all node's childen between tests
@@ -207,7 +208,7 @@ impl TestRunner {
         let mut value = FOCUSED_TEST.lock().unwrap();
         *value = None;
 
-        let children = self.base.get_children();
+        let children = self.base().get_children();
         for child in children.iter_shared() {
             child.free();
         }
@@ -232,7 +233,7 @@ impl TestRunner {
         }
 
         let result = panic::catch_unwind(|| {
-            current_test.unwrap()(&self.base);
+            current_test.unwrap()(&self.base());
         });
 
         match result {
